@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.126" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/daily.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/daily_blue.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/history.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/history_blue.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2085" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/magnify.xml" value="0.1035" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/trending-up.xml" value="0.1035" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/trending_down.xml" value="0.1035" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/trending_up.xml" value="0.1035" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/activity_profile.xml" value="0.3115415657788539" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/fragment_dummy.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/fragment_webview.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/preload_layout.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/menu/menu.xml" value="0.25" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/menu/profile.xml" value="0.2765625" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/menu/searchbar.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1035" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
