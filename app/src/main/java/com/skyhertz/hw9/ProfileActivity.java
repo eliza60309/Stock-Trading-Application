@@ -21,6 +21,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -48,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     //special data
     boolean trend_up = false;
     boolean trend_down = false;
+    final boolean[] preferred = {false};
 
     //states
     boolean doneRequests = false;
@@ -72,8 +74,44 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile, menu);
+
+        //Setup star
+        menu.findItem(R.id.star).setIcon(R.drawable.star_outline);
+        for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
+            if(MainActivity.preferenceList.get(i).get_stock_id().equals(stock_id)) {
+                menu.findItem(R.id.star).setIcon(R.drawable.star);
+                preferred[0] = true;
+                break;
+            }
+        }
+        menu.findItem(R.id.star).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                preferred[0] = !preferred[0];
+                if(preferred[0]) {
+                    MainActivity.preferenceList.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
+                    MainActivity.mainActivity.updatePreferenceList();
+                    menu.findItem(R.id.star).setIcon(R.drawable.star);
+                }
+                else {
+                    menu.findItem(R.id.star).setIcon(R.drawable.star_outline);
+                    for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
+                        if(MainActivity.preferenceList.get(i).get_stock_id().equals(stock_id)) {
+                            MainActivity.preferenceList.remove(i);
+                            MainActivity.mainActivity.updatePreferenceList();
+                            break;
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+
+
+
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,29 +119,50 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
 
-/* Moved to later
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle());
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText("OBJECT " + (position + 1))
-        ).attach();
-*/
-
 
 
         stock_id = getIntent().getExtras().getString("STOCK_ID");
+        System.out.println(stock_id);
+
+        //Setup toolbar
         Toolbar toolbar = findViewById(R.id.my_toolbar);
-        //toolbar.inflateMenu(R.menu.profile);
-        //toolbar.setTitle(stock_id);
-        //toolbar.setNavigationIcon(R.drawable.ic_launcher_background);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(stock_id);
 
-        //getSupportActionBar().setDisplayShowTitleEnabled(true);
-        //getMenuInflater().inflate(R.menu.profile);
+
+        //Setup star
+        /*final boolean[] preferred = {false};
+        toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star_outline);
+        for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
+            if(MainActivity.preferenceList.get(i).get_stock_id() == stock_id) {
+                toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star);
+                preferred[0] = true;
+                break;
+            }
+        }
+        System.out.println("safe");
+        toolbar.getMenu().findItem(R.id.star).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                preferred[0] = !preferred[0];
+                if(preferred[0]) {
+                    MainActivity.preferenceList.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
+                    toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star);
+                }
+                else {
+                    toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star_outline);
+                    for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
+                        if(MainActivity.preferenceList.get(i).get_stock_id() == stock_id) {
+                            MainActivity.preferenceList.remove(i);
+                            break;
+                        }
+                    }
+                }
+                return false;
+            }
+        });*/
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -156,6 +215,12 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         GetRequest.get("candle", stock_id, sma_params, callbacks, this);*/
+        WebView webView = (WebView) findViewById(R.id.eps);
+        webView.setWebViewClient(new WebViewClient());
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/eps.html?STOCK_ID=%1$s", stock_id));
+
 /* TODO: moved to fragments
         WebView webView = (WebView) findViewById(R.id.chart2);
         webView.setWebViewClient(new WebViewClient());
@@ -339,18 +404,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void setQuote() {
         try {
-            ((TextView) findViewById(R.id.price)).setText("$" + String.valueOf(quote.getDouble("c")));
-            ((TextView) findViewById(R.id.price_change)).setText("$" + String.valueOf(quote.getDouble("d")) + " (" + String.valueOf(quote.getDouble("dp")) + "%)");
-            trend_up = quote.getDouble("d") > 0;
-            trend_down = quote.getDouble("d") < 0;
+            ((TextView) findViewById(R.id.price)).setText("$" + String.valueOf(Math.round(quote.getDouble("c") * 100.0) / 100.0));
+            ((TextView) findViewById(R.id.price_change)).setText("$" + String.valueOf(Math.round(quote.getDouble("d") * 100.0) / 100.0) + " (" + String.valueOf(Math.round(quote.getDouble("dp") * 100.0) / 100.0) + "%)");
+            trend_up = Math.round(quote.getDouble("d") * 100.0) > 0;
+            trend_down = Math.round(quote.getDouble("d") * 100.0) < 0;
             ((ImageView) findViewById(R.id.trend)).setVisibility(View.VISIBLE);
             if(trend_up) {
-                ((ImageView) findViewById(R.id.trend)).setImageDrawable((Drawable) getDrawable(R.drawable.trending_up));
+                ((ImageView) findViewById(R.id.trend)).setImageDrawable(getDrawable(R.drawable.trending_up));
                 ((ImageView) findViewById(R.id.trend)).setColorFilter(getColor(R.color.green));
                 ((TextView) findViewById(R.id.price_change)).setTextColor(getColor(R.color.green));
             }
             else if(trend_down) {
-                ((ImageView) findViewById(R.id.trend)).setImageDrawable((Drawable) getDrawable(R.drawable.trending_down));
+                ((ImageView) findViewById(R.id.trend)).setImageDrawable(getDrawable(R.drawable.trending_down));
                 ((ImageView) findViewById(R.id.trend)).setColorFilter(getColor(R.color.red));
                 ((TextView) findViewById(R.id.price_change)).setTextColor(getColor(R.color.red));
             }
