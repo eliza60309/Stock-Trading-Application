@@ -105,6 +105,7 @@
             android:layout_height="400dp"
             android:layout_below="@id/banner"
             android:layout_weight="1" />
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
@@ -112,18 +113,226 @@
                 android:layout_below="@id/viewPager"
                 app:tabIndicatorColor="@color/blue"
                 app:tabSelectedTextColor="@color/blue"
-                app:tabTextColor="@color/black"/>
+                app:tabTextColor="@color/black" />
+
+            <TextView
+                android:id="@+id/text_portfolio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tabLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Portfolio"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_portfolio"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/portfolio">
+                <TableRow>
+                    <TextView
+                        android:text="Shares Owned:"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Avg. Cost / Share:       "
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Total Cost: "
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Change: "
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Market Value: "
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/text_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/portfolio"
+                android:layout_alignParentStart="true"
+                android:text="Stats"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_stats"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/stats">
+                <TableRow>
+                    <TextView
+                        android:text="Open Price:"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="     High Price:"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Low Price:"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="     Prev. Close:"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/text_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stats"
+                android:layout_alignParentStart="true"
+                android:text="About"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_about"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/about">
+                <TableRow>
+                    <TextView
+                        android:text="IPO Start Date"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="1-1-1912"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Industry"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="Make money"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Webpage"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="Rick Roll"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Company Peers"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="Rick Roll"
+                        android:textColor="@color/black"
+                        android:padding="3dip" />
+                </TableRow>
+            </TableLayout>
+
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/text_insights"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about"
+                android:layout_alignParentStart="true"
+                android:text="Insights"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
             <WebView
+                android:visibility="gone"
                 android:id="@+id/eps"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_below="@id/tabLayout"></WebView>
 
-            <WebView
+            <TextView
                 android:id="@+id/padding"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/eps"></WebView>
+                android:layout_below="@id/text_insights"></TextView>
         </RelativeLayout>
     </ScrollView>
 

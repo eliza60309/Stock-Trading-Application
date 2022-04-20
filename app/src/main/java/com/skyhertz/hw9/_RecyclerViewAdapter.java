@@ -25,6 +25,7 @@ import java.util.TimerTask;
 public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdapter.MyViewHolder> implements _ItemMoveCallback.ItemTouchHelperContract {
 
     private ArrayList<PreferenceEntry> data;
+    boolean rowMoved = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -126,6 +127,7 @@ public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdap
             }
         }
         notifyItemMoved(fromPosition, toPosition);
+        rowMoved = true;
     }
 
     @Override
@@ -136,6 +138,15 @@ public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdap
     @Override
     public void onRowClear(MyViewHolder myViewHolder) {
         myViewHolder.rowView.setBackgroundColor(Color.WHITE);
-        MainActivity.mainActivity.updatePreferenceList();
+        if(rowMoved) {
+            rowMoved = false;
+            MainActivity.mainActivity.updatePreferenceList();
+        }
+    }
+
+    public void delete(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
+        MainActivity.mainActivity.localStorage.savePreference(MainActivity.preferenceList);
     }
 }

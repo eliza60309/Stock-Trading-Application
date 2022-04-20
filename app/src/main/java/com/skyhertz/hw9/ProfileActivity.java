@@ -97,8 +97,10 @@ public class ProfileActivity extends AppCompatActivity {
                     menu.findItem(R.id.star).setIcon(R.drawable.star_outline);
                     for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
                         if(MainActivity.preferenceList.get(i).get_stock_id().equals(stock_id)) {
-                            MainActivity.preferenceList.remove(i);
-                            MainActivity.mainActivity.updatePreferenceList();
+                            //MainActivity.preferenceList.remove(i);
+                            //MainActivity.mainActivity.updatePreferenceList();
+                            MainActivity.mainActivity.recyclerViewAdapter.delete(i);
+                            MainActivity.mainActivity.localStorage.savePreference(MainActivity.preferenceList);
                             break;
                         }
                     }

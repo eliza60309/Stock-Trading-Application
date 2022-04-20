@@ -16,6 +16,53 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:layout_editor_absoluteX="16dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/my_toolbar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="PORTFOLIO"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:id="@+id/text_portfolio">
+            </TextView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/portfolioListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/text_favorite">
+            </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="FAVORITES"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:id="@+id/text_favorite">
+            </TextView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/preferenceListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/text_favorite">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+    </ScrollView>
+    <!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,5 +80,5 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/text_favorite">
-    </androidx.recyclerview.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

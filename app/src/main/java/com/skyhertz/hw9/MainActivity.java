@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public void updatePreferenceList() {
         localStorage.savePreference(preferenceList);
+
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -108,11 +109,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         recyclerView = findViewById(R.id.preferenceListView);
         localStorage = new LocalStorage();
+        localStorage.clearPreference();
         preferenceList = localStorage.loadPreference();
-
-        //preferenceList.add(new PreferenceEntry("AAPL", "Expensive Device Company"));
-        //preferenceList.add(new PreferenceEntry("TSLA", "Iron Ball to the Window"));
-        //preferenceList.add(new PreferenceEntry("MSFT", "Windows 10 is the last Windows"));
+        preferenceList.add(new PreferenceEntry("AAPL", "Expensive Device Company"));
+        preferenceList.add(new PreferenceEntry("TSLA", "Iron Ball to the Window"));
+        preferenceList.add(new PreferenceEntry("MSFT", "Windows 10 is the last Windows"));
 
 
 
