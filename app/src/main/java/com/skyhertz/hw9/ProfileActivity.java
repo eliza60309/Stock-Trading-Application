@@ -217,7 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         GetRequest.get("candle", stock_id, sma_params, callbacks, this);*/
-        WebView webView = (WebView) findViewById(R.id.eps);
+        WebView webView = findViewById(R.id.eps);
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -406,11 +406,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void setQuote() {
         try {
-            ((TextView) findViewById(R.id.price)).setText("$" + String.valueOf(Math.round(quote.getDouble("c") * 100.0) / 100.0));
-            ((TextView) findViewById(R.id.price_change)).setText("$" + String.valueOf(Math.round(quote.getDouble("d") * 100.0) / 100.0) + " (" + String.valueOf(Math.round(quote.getDouble("dp") * 100.0) / 100.0) + "%)");
+            ((TextView) findViewById(R.id.price)).setText("$" + Math.round(quote.getDouble("c") * 100.0) / 100.0);
+            ((TextView) findViewById(R.id.price_change)).setText("$" + Math.round(quote.getDouble("d") * 100.0) / 100.0 + " (" + Math.round(quote.getDouble("dp") * 100.0) / 100.0 + "%)");
+            ((TextView) findViewById(R.id.stats_open)).setText("$" + Math.round(quote.getDouble("o") * 100.0) / 100.0);
+            ((TextView) findViewById(R.id.stats_high)).setText("$" + Math.round(quote.getDouble("h") * 100.0) / 100.0);
+            ((TextView) findViewById(R.id.stats_low)).setText("$" + Math.round(quote.getDouble("l") * 100.0) / 100.0);
+            ((TextView) findViewById(R.id.stats_close)).setText("$" + Math.round(quote.getDouble("pc") * 100.0) / 100.0);
             trend_up = Math.round(quote.getDouble("d") * 100.0) > 0;
             trend_down = Math.round(quote.getDouble("d") * 100.0) < 0;
-            ((ImageView) findViewById(R.id.trend)).setVisibility(View.VISIBLE);
+            findViewById(R.id.trend).setVisibility(View.VISIBLE);
             if(trend_up) {
                 ((ImageView) findViewById(R.id.trend)).setImageDrawable(getDrawable(R.drawable.trending_up));
                 ((ImageView) findViewById(R.id.trend)).setColorFilter(getColor(R.color.green));

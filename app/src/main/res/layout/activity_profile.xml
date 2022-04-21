@@ -141,7 +141,8 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
-                        android:text="0"
+                        android:id="@+id/portfolio_count"
+                        android:text="0//TODO"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
@@ -151,7 +152,8 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
-                        android:text="$0.00"
+                        android:id="@+id/portfolio_average"
+                        android:text="$0.00//TODO"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
@@ -161,7 +163,8 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
-                        android:text="$0.00"
+                        android:id="@+id/portfolio_cost"
+                        android:text="$0.00//TODO"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
@@ -171,7 +174,8 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
-                        android:text="$0.00"
+                        android:id="@+id/portfolio_change"
+                        android:text="$0.00//TODO"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
@@ -181,7 +185,8 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
-                        android:text="$0.00"
+                        android:id="@+id/portfolio_value"
+                        android:text="$0.00//TODO"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
@@ -213,6 +218,7 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
+                        android:id="@+id/stats_open"
                         android:text="$0.00"
                         android:textColor="@color/black"
                         android:padding="3dip" />
@@ -221,12 +227,14 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
+                        android:id="@+id/stats_high"
                         android:text="$0.00"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
                 <TableRow>
                     <TextView
+                        android:id="@+id/stats_low"
                         android:text="Low Price:"
                         android:textColor="@color/black"
                         android:padding="3dip" />
@@ -239,6 +247,7 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
+                        android:id="@+id/stats_close"
                         android:text="$0.00"
                         android:textColor="@color/black"
                         android:padding="3dip" />
@@ -321,8 +330,14 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <WebView
-                android:visibility="gone"
+                android:id="@+id/recommendation"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@id/tabLayout"></WebView>
+
+            <WebView
                 android:id="@+id/eps"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
