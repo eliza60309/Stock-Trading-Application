@@ -17,9 +17,11 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <ScrollView
+        android:id="@+id/scrollable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"        app:layout_constraintStart_toStartOf="parent">
+        android:scrollbars="none"
+        app:layout_constraintStart_toStartOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -92,14 +94,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_toStartOf="@id/price_change"></ImageView>
             </RelativeLayout>
-            <!--<androidx.fragment.app.FragmentContainerView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_below="@id/banner"
-                android:id="@+id/tabFragment">
-
-            </androidx.fragment.app.FragmentContainerView>
--->            <androidx.viewpager2.widget.ViewPager2
+            <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="400dp"
@@ -148,7 +143,7 @@
                 </TableRow>
                 <TableRow>
                     <TextView
-                        android:text="Avg. Cost / Share:       "
+                        android:text="Avg. Cost / Share:   "
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
@@ -276,10 +271,11 @@
                 android:id="@+id/about">
                 <TableRow>
                     <TextView
-                        android:text="IPO Start Date"
+                        android:text="IPO Start Date    "
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
+                        android:id="@+id/about_ipo"
                         android:text="1-1-1912"
                         android:textColor="@color/black"
                         android:padding="3dip" />
@@ -290,32 +286,50 @@
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
+                        android:id="@+id/about_industry"
                         android:text="Make money"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                 </TableRow>
                 <TableRow>
                     <TextView
+                        android:id="@+id/text_webpage"
                         android:text="Webpage"
                         android:textColor="@color/black"
                         android:padding="3dip" />
                     <TextView
+                        android:id="@+id/about_webpage"
                         android:text="Rick Roll"
-                        android:textColor="@color/black"
-                        android:padding="3dip" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="Company Peers"
-                        android:textColor="@color/black"
-                        android:padding="3dip" />
-                    <TextView
-                        android:text="Rick Roll"
-                        android:textColor="@color/black"
+                        android:textColor="@color/blue"
                         android:padding="3dip" />
                 </TableRow>
             </TableLayout>
+            <TextView
+                android:text="Company Peers "
+                android:id="@+id/peers_text"
+                android:textColor="@color/black"
+                android:layout_below="@id/about"
+                android:layout_alignStart="@id/about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <HorizontalScrollView
+                android:id="@+id/about_peers_view"
+                android:layout_toEndOf="@id/peers_text"
+                android:layout_alignBottom="@id/peers_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:padding="3dip"
+                android:layout_marginRight="40dp">
+                <LinearLayout
+                    android:id="@+id/about_peers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <TextView
                 android:layout_marginStart="10dp"
@@ -324,30 +338,117 @@
                 android:id="@+id/text_insights"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/about"
+                android:layout_below="@id/peers_text"
                 android:layout_alignParentStart="true"
                 android:text="Insights"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/text_social_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_insights"
+                android:text="Social Sentiments"
+                android:textAlignment="center"
+                android:textSize="20sp"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_social_title"
+                android:layout_margin="15dp"
+                android:id="@+id/social"
+                android:stretchColumns="0,1,2">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/social_name"
+                        android:text="Money Company"
+                        android:background="@color/grey"
+                        android:textStyle="bold"
+                        android:padding="3dip"/>
+                    <TextView
+                        android:text="Reddit"
+                        android:background="@color/grey"
+                        android:padding="3dip" />
+                    <TextView
+                        android:text="Twitter"
+                        android:background="@color/grey"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Total Mentions"
+                        android:background="@color/grey"
+                        android:textStyle="bold"
+                        android:padding="3dip" />
+                    <TextView
+                        android:id="@+id/social_reddit_total"
+                        android:text="0"
+                        android:background="@color/lightgrey"
+                        android:padding="3dip" />
+                    <TextView
+                        android:id="@+id/social_twitter_total"
+                        android:text="0"
+                        android:background="@color/lightgrey"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Positive Mentions"
+                        android:background="@color/grey"
+                        android:textStyle="bold"
+                        android:padding="3dip" />
+                    <TextView
+                        android:id="@+id/social_reddit_positive"
+                        android:text="0"
+                        android:background="@color/lightgrey"
+                        android:padding="3dip" />
+                    <TextView
+                        android:id="@+id/social_twitter_positive"
+                        android:text="0"
+                        android:background="@color/lightgrey"
+                        android:padding="3dip" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="Negative Mentions"
+                        android:background="@color/grey"
+                        android:textStyle="bold"
+                        android:padding="3dip" />
+                    <TextView
+                        android:id="@+id/social_reddit_negative"
+                        android:text="0"
+                        android:background="@color/lightgrey"
+                        android:padding="3dip" />
+                    <TextView
+                        android:id="@+id/social_twitter_negative"
+                        android:text="0"
+                        android:background="@color/lightgrey"
+                        android:padding="3dip" />
+                </TableRow>
+            </TableLayout>
+
             <WebView
                 android:id="@+id/recommendation"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_below="@id/tabLayout"></WebView>
+                android:layout_below="@id/social"></WebView>
 
             <WebView
                 android:id="@+id/eps"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_below="@id/tabLayout"></WebView>
+                android:layout_below="@id/recommendation"></WebView>
 
             <TextView
                 android:id="@+id/padding"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/text_insights"></TextView>
+                android:layout_below="@id/eps"></TextView>
         </RelativeLayout>
     </ScrollView>
 

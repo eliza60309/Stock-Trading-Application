@@ -186,8 +186,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                                                                   @Override
                                                                   public void onItemClick(AdapterView<?> adapterView, View view, int itemIndex, long id) {
                                                                       String queryString=(String)adapterView.getItemAtPosition(itemIndex);
-                                                                      //searchAutoComplete.setText("" + queryString.substring(0, queryString.indexOf(' ')));
-                                                                      //Toast.makeText(MainActivity.this, "you clicked " + queryString, Toast.LENGTH_LONG).show();
                                                                       Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                                                                       intent.putExtra("STOCK_ID", queryString.substring(0, queryString.indexOf(' ')));
                                                                       startActivity(intent);

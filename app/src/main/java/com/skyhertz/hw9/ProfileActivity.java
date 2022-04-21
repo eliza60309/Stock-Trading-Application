@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.BlendModeColorFilterCompat;
 import androidx.core.graphics.BlendModeCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
@@ -18,10 +19,14 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -29,6 +34,8 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +57,13 @@ public class ProfileActivity extends AppCompatActivity {
     boolean trend_up = false;
     boolean trend_down = false;
     final boolean[] preferred = {false};
+    int redditTotal = 0;
+    int twitterTotal = 0;
+    int redditPositive = 0;
+    int twitterPositive = 0;
+    int redditNegative = 0;
+    int twitterNegative = 0;
+    String url = "";
 
     //states
     boolean doneRequests = false;
@@ -61,8 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
     JSONObject quote;
     //JSONObject sma;
     JSONObject social;
-    JSONArray recommendation;
-    JSONArray earnings;
+    //JSONArray recommendation;
+    //JSONArray earnings;
     JSONArray peers;
     JSONObject daily;
     JSONArray news;
@@ -223,6 +237,12 @@ public class ProfileActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/eps.html?STOCK_ID=%1$s", stock_id));
 
+        WebView webView2 = findViewById(R.id.recommendation);
+        webView2.setWebViewClient(new WebViewClient());
+        webView2.getSettings().setDomStorageEnabled(true);
+        webView2.getSettings().setJavaScriptEnabled(true);
+        webView2.loadUrl(String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/recommendation.html?STOCK_ID=%1$s", stock_id));
+
 /* TODO: moved to fragments
         WebView webView = (WebView) findViewById(R.id.chart2);
         webView.setWebViewClient(new WebViewClient());
@@ -235,6 +255,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(JSONObject result) {
                 social = result;
+                setSocial();
                 checkDone();
             }
         };
@@ -244,27 +265,8 @@ public class ProfileActivity extends AppCompatActivity {
         arrayCallbacks = new RequestArrayCallbacks() {
             @Override
             public void onSuccess(JSONArray result) {
-                recommendation = result;
-                checkDone();
-            }
-        };
-        GetRequest.getArray("recommendation", stock_id, new JSONObject(), arrayCallbacks, this);
-
-
-        arrayCallbacks = new RequestArrayCallbacks() {
-            @Override
-            public void onSuccess(JSONArray result) {
-                earnings = result;
-                checkDone();
-            }
-        };
-        GetRequest.getArray("earnings", stock_id, new JSONObject(), arrayCallbacks, this);
-
-
-        arrayCallbacks = new RequestArrayCallbacks() {
-            @Override
-            public void onSuccess(JSONArray result) {
                 peers = result;
+                setPeers();
                 checkDone();
             }
         };
@@ -339,25 +341,6 @@ public class ProfileActivity extends AppCompatActivity {
                         tab.setIcon(R.drawable.history);
                     }
                 }).attach();
-
-/* TODO: moved to fragments
-        WebView webView = (WebView) findViewById(R.id.chart);
-        webView.setWebViewClient(new WebViewClient());
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/daily.html?STOCK_ID=%1$s&RESOLUTION=5&FROM=%2$s&TO=%3$s&COLOR=%4$s",
-                stock_id, t - 21600, t,
-                (trend_up? "GREEN": trend_down? "RED": "BLACK")));*/
-        /*
-        JSONObject daily_params = new JSONObject();
-        try {
-            daily_params.put("RESOLUTION", "5");
-            daily_params.put("FROM", t - 21600);
-            daily_params.put("TO", t);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        GetRequest.get("candle", stock_id, daily_params, callbacks, this);*/
     }
 
     public synchronized void checkDone() {
@@ -365,18 +348,18 @@ public class ProfileActivity extends AppCompatActivity {
                 quote != null &&
                 //sma != null &&
                 social != null &&
-                recommendation != null &&
-                earnings != null &&
+                //recommendation != null &&
+                //earnings != null &&
                 peers != null &&
                 daily != null &&
                 news != null) {
             doneRequests = true;
-            System.out.println(query.toString());
-            System.out.println(quote.toString());
+            //System.out.println(query.toString());
+            //System.out.println(quote.toString());
             //System.out.println(sma.toString());
             System.out.println(social.toString());
-            System.out.println(recommendation.toString());
-            System.out.println(earnings.toString());
+            //System.out.println(recommendation.toString());
+            //System.out.println(earnings.toString());
             System.out.println(peers.toString());
             System.out.println(daily.toString());
             System.out.println(news.toString());
@@ -399,6 +382,23 @@ public class ProfileActivity extends AppCompatActivity {
             });
             ((TextView) findViewById(R.id.stock_id)).setText(query.getString("ticker"));
             ((TextView) findViewById(R.id.company)).setText(query.getString("name"));
+            ((TextView) findViewById(R.id.social_name)).setText(query.getString("name"));
+            ((TextView) findViewById(R.id.about_ipo)).setText(query.getString("ipo"));
+            ((TextView) findViewById(R.id.about_industry)).setText(query.getString("finnhubIndustry"));
+
+            SpannableString content = new SpannableString(query.getString("weburl"));
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            ((TextView) findViewById(R.id.about_webpage)).setText(content);
+            url = query.getString("weburl");
+            findViewById(R.id.about_webpage).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //6.13 https://www.tutorialkart.com/kotlin-android/android-open-url-in-browser-activity/
+                    Intent openURL = new Intent(android.content.Intent.ACTION_VIEW);
+                    openURL.setData(Uri.parse(url));
+                    startActivity(openURL);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -431,6 +431,63 @@ public class ProfileActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.price_change)).setTextColor(getColor(R.color.black));
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setPeers() {
+        try {
+            LinearLayout peersView = findViewById(R.id.about_peers);
+            for (int i = 0; i < peers.length(); i++) {
+                SpannableString content = new SpannableString(peers.get(i).toString() + ",");
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                TextView textView = new TextView(this);
+                textView.setText(content);
+                textView.setTooltipText(peers.get(i).toString());
+                textView.setTextColor(getColor(R.color.blue));
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                        intent.putExtra("STOCK_ID", view.getTooltipText());
+                        startActivity(intent);
+                    }
+                });
+                peersView.addView(textView);
+                textView = new TextView(this);
+                textView.setText("  ");
+                peersView.addView(textView);
+            }
+            TextView textView = new TextView(this);
+            textView.setText(" ");
+            peersView.addView(textView);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSocial() {
+        try {
+            JSONArray jsonArray = social.getJSONArray("reddit");
+            for(int i = 0; i < jsonArray.length(); i++) {
+                redditTotal += jsonArray.getJSONObject(i).getInt("mention");
+                redditNegative += jsonArray.getJSONObject(i).getInt("positiveMention");
+                redditPositive += jsonArray.getJSONObject(i).getInt("negativeMention");
+            }
+            jsonArray = social.getJSONArray("twitter");
+            for(int i = 0; i < jsonArray.length(); i++) {
+                twitterTotal += jsonArray.getJSONObject(i).getInt("mention");
+                twitterNegative += jsonArray.getJSONObject(i).getInt("positiveMention");
+                twitterPositive += jsonArray.getJSONObject(i).getInt("negativeMention");
+            }
+            ((TextView) findViewById(R.id.social_twitter_total)).setText(String.valueOf(twitterTotal));
+            ((TextView) findViewById(R.id.social_twitter_positive)).setText(String.valueOf(twitterPositive));
+            ((TextView) findViewById(R.id.social_twitter_negative)).setText(String.valueOf(twitterNegative));
+            ((TextView) findViewById(R.id.social_reddit_total)).setText(String.valueOf(redditTotal));
+            ((TextView) findViewById(R.id.social_reddit_positive)).setText(String.valueOf(redditPositive));
+            ((TextView) findViewById(R.id.social_reddit_negative)).setText(String.valueOf(redditNegative));
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
