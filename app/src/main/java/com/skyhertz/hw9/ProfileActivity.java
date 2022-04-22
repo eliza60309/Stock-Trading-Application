@@ -103,8 +103,10 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 preferred[0] = !preferred[0];
                 if(preferred[0]) {
-                    MainActivity.preferenceList.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
-                    MainActivity.mainActivity.updatePreferenceList();
+                    //MainActivity.preferenceList.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
+                    //MainActivity.mainActivity.updatePreferenceList();
+                    MainActivity.mainActivity.preferenceListRecyclerViewAdapter.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
+                    LocalStorage.savePreferenceStorage(MainActivity.preferenceList);
                     menu.findItem(R.id.star).setIcon(R.drawable.star);
                 }
                 else {
@@ -113,8 +115,8 @@ public class ProfileActivity extends AppCompatActivity {
                         if(MainActivity.preferenceList.get(i).get_stock_id().equals(stock_id)) {
                             //MainActivity.preferenceList.remove(i);
                             //MainActivity.mainActivity.updatePreferenceList();
-                            MainActivity.mainActivity.recyclerViewAdapter.delete(i);
-                            MainActivity.mainActivity.localStorage.savePreference(MainActivity.preferenceList);
+                            MainActivity.mainActivity.preferenceListRecyclerViewAdapter.delete(i);
+                            LocalStorage.savePreferenceStorage(MainActivity.preferenceList);
                             break;
                         }
                     }

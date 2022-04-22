@@ -24,7 +24,7 @@ import java.util.TimerTask;
 
 //Hint 6.23 https://www.journaldev.com/23208/android-recyclerview-drag-and-drop
 //Hint 6.22 https://www.journaldev.com/23164/android-recyclerview-swipe-to-delete-undo
-public class _ItemMoveCallback extends ItemTouchHelper.Callback {
+public class PreferenceEntryMoveCallback extends ItemTouchHelper.Callback {
 
     Context mContext;
     private Paint mClearPaint;
@@ -36,7 +36,7 @@ public class _ItemMoveCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperContract mAdapter;
 
-    public _ItemMoveCallback(ItemTouchHelperContract adapter) {
+    public PreferenceEntryMoveCallback(ItemTouchHelperContract adapter) {
         mAdapter = adapter;
 
         mContext = MainActivity.mainActivity;
@@ -89,9 +89,9 @@ public class _ItemMoveCallback extends ItemTouchHelper.Callback {
 
 
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-            if (viewHolder instanceof _RecyclerViewAdapter.MyViewHolder) {
-                _RecyclerViewAdapter.MyViewHolder myViewHolder=
-                        (_RecyclerViewAdapter.MyViewHolder) viewHolder;
+            if (viewHolder instanceof PreferenceListRecyclerViewAdapter.MyViewHolder) {
+                PreferenceListRecyclerViewAdapter.MyViewHolder myViewHolder=
+                        (PreferenceListRecyclerViewAdapter.MyViewHolder) viewHolder;
                 mAdapter.onRowSelected(myViewHolder);
             }
 
@@ -104,9 +104,9 @@ public class _ItemMoveCallback extends ItemTouchHelper.Callback {
                           RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
 
-        if (viewHolder instanceof _RecyclerViewAdapter.MyViewHolder) {
-            _RecyclerViewAdapter.MyViewHolder myViewHolder=
-                    (_RecyclerViewAdapter.MyViewHolder) viewHolder;
+        if (viewHolder instanceof PreferenceListRecyclerViewAdapter.MyViewHolder) {
+            PreferenceListRecyclerViewAdapter.MyViewHolder myViewHolder=
+                    (PreferenceListRecyclerViewAdapter.MyViewHolder) viewHolder;
             mAdapter.onRowClear(myViewHolder);
         }
     }
@@ -114,8 +114,8 @@ public class _ItemMoveCallback extends ItemTouchHelper.Callback {
     public interface ItemTouchHelperContract {
 
         void onRowMoved(int fromPosition, int toPosition);
-        void onRowSelected(_RecyclerViewAdapter.MyViewHolder myViewHolder);
-        void onRowClear(_RecyclerViewAdapter.MyViewHolder myViewHolder);
+        void onRowSelected(PreferenceListRecyclerViewAdapter.MyViewHolder myViewHolder);
+        void onRowClear(PreferenceListRecyclerViewAdapter.MyViewHolder myViewHolder);
 
         void delete(int position);
     }

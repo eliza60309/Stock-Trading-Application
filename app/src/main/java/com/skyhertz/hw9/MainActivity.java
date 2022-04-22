@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -44,58 +46,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     int index = 0;
 
     //Preference List Function
-    RecyclerView recyclerView;
-    _RecyclerViewAdapter recyclerViewAdapter;
+    RecyclerView preferenceListRecyclerView;
+    PreferenceListRecyclerViewAdapter preferenceListRecyclerViewAdapter;
     static ArrayList<PreferenceEntry> preferenceList;
 
-    public class LocalStorage {
-        public ArrayList<PreferenceEntry> loadPreference() {
-            SharedPreferences getter = getSharedPreferences("Data", 0);
-            ArrayList<PreferenceEntry> arrayList = new ArrayList<PreferenceEntry>();
-            if (getter.getString("Preference", null) == null || getter.getString("Preference", null).isEmpty()) {
-                return arrayList;
-            }
-            System.out.println("GET PREFERENCE: " + getter.getString("Preference", null));
-            try {
-                JSONArray jsonArray = new JSONArray(getter.getString("Preference", null));
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    PreferenceEntry preferenceEntry = new PreferenceEntry(jsonObject.getString("stock_id"), jsonObject.getString("name"));
-                    arrayList.add(preferenceEntry);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return arrayList;
-        }
-        public void savePreference(ArrayList<PreferenceEntry> arrayList) {
-            SharedPreferences.Editor setter = getSharedPreferences("Data", 0).edit();
-            try {
-                JSONArray jsonArray = new JSONArray();
-                for(int i = 0; i < arrayList.size(); i++) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("stock_id", arrayList.get(i).get_stock_id());
-                    jsonObject.put("name", arrayList.get(i).get_name());
-                    jsonArray.put(jsonObject);
-                }
-                setter.putString("Preference", jsonArray.toString());
-                setter.commit();
-                System.out.println("SET PREFERENCE: " + jsonArray.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        public void clearPreference() {
-            SharedPreferences.Editor setter = getSharedPreferences("Data", 0).edit();
-            setter.remove("Preference");
-            setter.commit();
-        }
-    }
+    //Portfolio List Function
+    RecyclerView portfolioListRecyclerView;
+    PortfolioListRecyclerViewAdapter portfolioListRecyclerViewAdapter;
+    static ArrayList<PortfolioEntry> portfolioList;
+
+    // Moved to individual file
+    // public class LocalStorage {}
 
     public void updatePreferenceList() {
-        localStorage.savePreference(preferenceList);
-
-        recyclerViewAdapter.notifyDataSetChanged();
+        localStorage.savePreferenceStorage(preferenceList);
+        preferenceListRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -107,24 +72,36 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = findViewById(R.id.preferenceListView);
-        localStorage = new LocalStorage();
-        localStorage.clearPreference();
-        preferenceList = localStorage.loadPreference();
+        preferenceListRecyclerView = findViewById(R.id.preferenceListView);
+        localStorage = new LocalStorage(this);
+        LocalStorage.clearPreferenceStorage();
+        preferenceList = LocalStorage.loadPreferenceStorage();
         preferenceList.add(new PreferenceEntry("AAPL", "Expensive Device Company"));
         preferenceList.add(new PreferenceEntry("TSLA", "Iron Ball to the Window"));
         preferenceList.add(new PreferenceEntry("MSFT", "Windows 10 is the last Windows"));
 
 
-
-        recyclerViewAdapter = new _RecyclerViewAdapter(preferenceList);
-
-        ItemTouchHelper.Callback callback = new _ItemMoveCallback(recyclerViewAdapter);
+        preferenceListRecyclerViewAdapter = new PreferenceListRecyclerViewAdapter(preferenceList);
+        ItemTouchHelper.Callback callback = new PreferenceEntryMoveCallback(preferenceListRecyclerViewAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
+        touchHelper.attachToRecyclerView(preferenceListRecyclerView);
+        preferenceListRecyclerView.setAdapter(preferenceListRecyclerViewAdapter);
+        LocalStorage.savePreferenceStorage(preferenceList);
 
-        recyclerView.setAdapter(recyclerViewAdapter);
 
+        portfolioListRecyclerView = findViewById(R.id.portfolioListView);
+        LocalStorage.clearPortfolioStorage();
+        portfolioList = LocalStorage.loadPortfolioStorage();
+        portfolioList.add(new PortfolioEntry("AAPL", "Expensive Device Company", 1, 165));
+        portfolioList.add(new PortfolioEntry("TSLA", "Iron Ball to the Window", 1, 1011));
+        portfolioList.add(new PortfolioEntry("MSFT", "Windows 10 is the last Windows", 1, 1000));
+
+
+        portfolioListRecyclerViewAdapter = new PortfolioListRecyclerViewAdapter(portfolioList);
+        ItemTouchHelper.Callback callback2 = new PortfolioEntryMoveCallback(portfolioListRecyclerViewAdapter);
+        ItemTouchHelper touchHelper2 = new ItemTouchHelper(callback2);
+        touchHelper2.attachToRecyclerView(portfolioListRecyclerView);
+        portfolioListRecyclerView.setAdapter(portfolioListRecyclerViewAdapter);
     }
 
     @Override
@@ -144,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onQueryTextSubmit(String query) {
         //TODO: Text submitted
         //TODO: HOW TO ADD TO PREFERENCE LIST
-        preferenceList.add(new PreferenceEntry(query, query));
-        System.out.println(preferenceList.toString());
-        recyclerViewAdapter.notifyDataSetChanged();
+        //preferenceList.add(new PreferenceEntry(query, query));
+        //System.out.println(preferenceList.toString());
+        //preferenceListRecyclerViewAdapter.notifyDataSetChanged();
         return false;
     }
 

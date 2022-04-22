@@ -2,7 +2,6 @@ package com.skyhertz.hw9;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 //Hint 6.23 https://www.journaldev.com/23208/android-recyclerview-drag-and-drop
-public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdapter.MyViewHolder> implements _ItemMoveCallback.ItemTouchHelperContract {
+public class PortfolioListRecyclerViewAdapter extends RecyclerView.Adapter<PortfolioListRecyclerViewAdapter.MyViewHolder> implements PortfolioEntryMoveCallback.ItemTouchHelperContract {
 
-    private ArrayList<PreferenceEntry> data;
+    private ArrayList<PortfolioEntry> data;
     boolean rowMoved = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -49,7 +48,7 @@ public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdap
         }
     }
 
-    public _RecyclerViewAdapter(ArrayList<PreferenceEntry> data) {
+    public PortfolioListRecyclerViewAdapter(ArrayList<PortfolioEntry> data) {
         this.data = data;
     }
 
@@ -78,10 +77,12 @@ public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdap
                     @Override
                     public void onSuccess(JSONObject result) {
                         try {
-                            holder.price.setText("$" + String.valueOf(Math.round(result.getDouble("c") * 100.0) / 100.0));
-                            holder.priceChange.setText("$" + String.valueOf(Math.round(result.getDouble("d") * 100.0) / 100.0) + " (" + String.valueOf(Math.round(result.getDouble("dp") * 100.0) / 100.0) + "%)");
-                            boolean trend_up = Math.round(result.getDouble("d") * 100.0) > 0;
-                            boolean trend_down = Math.round(result.getDouble("d") * 100.0) < 0;
+                            holder.price.setText("$" + Math.round(result.getDouble("c") * 100.0) / 100.0 * data.get(position).get_hold());
+                            double d_total = Math.round((result.getDouble("c") - data.get(position).get_average()) * data.get(position).get_hold() * 100.0) / 100.0;
+                            double cost_total = data.get(position).get_average() * data.get(position).get_hold() * 100.0 / 100.0;
+                            holder.priceChange.setText("$" + d_total  + " (" + Math.round(d_total / cost_total * 10000.0) / 100.0 + "%)");
+                            boolean trend_up = d_total > 0;
+                            boolean trend_down = d_total < 0;
                             holder.trend.setVisibility(View.VISIBLE);
                             if(trend_up) {
                                 holder.trend.setImageDrawable(AppCompatResources.getDrawable(holder.itemView.getContext(), R.drawable.trending_up));
@@ -140,13 +141,17 @@ public class _RecyclerViewAdapter extends RecyclerView.Adapter<_RecyclerViewAdap
         myViewHolder.rowView.setBackgroundColor(Color.WHITE);
         if(rowMoved) {
             rowMoved = false;
-            MainActivity.mainActivity.updatePreferenceList();
+
         }
     }
 
     public void delete(int position) {
         data.remove(position);
         notifyItemRemoved(position);
-        MainActivity.mainActivity.localStorage.savePreference(MainActivity.preferenceList);
+    }
+
+    public void add(PortfolioEntry portfolioEntry) {
+        data.add(portfolioEntry);
+        notifyItemInserted(data.indexOf(portfolioEntry));
     }
 }
