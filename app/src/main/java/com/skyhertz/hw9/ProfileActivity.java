@@ -1,46 +1,36 @@
 package com.skyhertz.hw9;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.BlendModeColorFilterCompat;
-import androidx.core.graphics.BlendModeCompat;
-import androidx.core.widget.NestedScrollView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.BlendModeColorFilter;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -64,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
     int redditNegative = 0;
     int twitterNegative = 0;
     String url = "";
+    PortfolioEntry portfolioEntry;
 
     //states
     boolean doneRequests = false;
@@ -78,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
     //JSONArray recommendation;
     //JSONArray earnings;
     JSONArray peers;
-    JSONObject daily;
+    //JSONObject daily;
     JSONArray news;
 
     //data that have to be passed this way
@@ -105,12 +96,14 @@ public class ProfileActivity extends AppCompatActivity {
                 if(preferred[0]) {
                     //MainActivity.preferenceList.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
                     //MainActivity.mainActivity.updatePreferenceList();
+                    Toast.makeText(ProfileActivity.this, stock_id + " is added to favorites", Toast.LENGTH_LONG).show();
                     MainActivity.mainActivity.preferenceListRecyclerViewAdapter.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
                     LocalStorage.savePreferenceStorage(MainActivity.preferenceList);
                     menu.findItem(R.id.star).setIcon(R.drawable.star);
                 }
                 else {
                     menu.findItem(R.id.star).setIcon(R.drawable.star_outline);
+                    Toast.makeText(ProfileActivity.this, stock_id + " is removed from favorites", Toast.LENGTH_LONG).show();
                     for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
                         if(MainActivity.preferenceList.get(i).get_stock_id().equals(stock_id)) {
                             //MainActivity.preferenceList.remove(i);
@@ -140,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         stock_id = getIntent().getExtras().getString("STOCK_ID");
-        System.out.println(stock_id);
+        portfolioEntry = MainActivity.mainActivity.findPortfolio(stock_id);
 
         //Setup toolbar
         Toolbar toolbar = findViewById(R.id.my_toolbar);
@@ -148,45 +141,13 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(stock_id);
 
-
-        //Setup star
-        /*final boolean[] preferred = {false};
-        toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star_outline);
-        for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
-            if(MainActivity.preferenceList.get(i).get_stock_id() == stock_id) {
-                toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star);
-                preferred[0] = true;
-                break;
-            }
-        }
-        System.out.println("safe");
-        toolbar.getMenu().findItem(R.id.star).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                preferred[0] = !preferred[0];
-                if(preferred[0]) {
-                    MainActivity.preferenceList.add(new PreferenceEntry(stock_id, ((TextView) findViewById(R.id.company)).getText().toString()));
-                    toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star);
-                }
-                else {
-                    toolbar.getMenu().findItem(R.id.star).setIcon(R.drawable.star_outline);
-                    for(int i = 0; i < MainActivity.preferenceList.size(); i++) {
-                        if(MainActivity.preferenceList.get(i).get_stock_id() == stock_id) {
-                            MainActivity.preferenceList.remove(i);
-                            break;
-                        }
-                    }
-                }
-                return false;
-            }
-        });*/
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
 
 
         //TODO: GetRequest.get("auto", newText, callbacks, this);
@@ -216,23 +177,6 @@ public class ProfileActivity extends AppCompatActivity {
         GetRequest.get("quote", stock_id, new JSONObject(), callbacks, this);
 
 
-        /*callbacks = new RequestCallbacks() {
-            @Override
-            public void onSuccess(JSONObject result) {
-                sma = result;
-                checkDone();
-            }
-        };
-        JSONObject sma_params = new JSONObject();
-        try {
-            sma_params.put("RESOLUTION", "D");
-            sma_params.put("FROM", String.valueOf(System.currentTimeMillis() / 1000 - 60 * 60 * 24 * 370 * 2));
-            sma_params.put("TO", String.valueOf(System.currentTimeMillis() / 1000));
-            System.out.println(sma_params);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        GetRequest.get("candle", stock_id, sma_params, callbacks, this);*/
         WebView webView = findViewById(R.id.eps);
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setDomStorageEnabled(true);
@@ -245,14 +189,6 @@ public class ProfileActivity extends AppCompatActivity {
         webView2.getSettings().setJavaScriptEnabled(true);
         webView2.loadUrl(String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/recommendation.html?STOCK_ID=%1$s", stock_id));
 
-/* TODO: moved to fragments
-        WebView webView = (WebView) findViewById(R.id.chart2);
-        webView.setWebViewClient(new WebViewClient());
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/sma.html?STOCK_ID=%1$s&RESOLUTION=D&FROM=%2$s&TO=%3$s",
-                stock_id, System.currentTimeMillis() / 1000 - 60 * 60 * 24 * 370 * 2, System.currentTimeMillis() / 1000));
-*/
         callbacks = new RequestCallbacks() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -279,6 +215,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(JSONArray result) {
                 news = result;
+                setNews();
                 checkDone();
             }
         };
@@ -303,13 +240,13 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestCallbacks callbacks = new RequestCallbacks() {
+        /*RequestCallbacks callbacks = new RequestCallbacks() {
             @Override
             public void onSuccess(JSONObject result) {
                 daily = result;
                 checkDone();
             }
-        };
+        };*/
 
         url_daily = String.format("https://hw789etc-343408.wl.r.appspot.com/hw9/daily.html?STOCK_ID=%1$s&RESOLUTION=5&FROM=%2$s&TO=%3$s&COLOR=%4$s",
                 stock_id, t - 21600, t,
@@ -353,26 +290,43 @@ public class ProfileActivity extends AppCompatActivity {
                 //recommendation != null &&
                 //earnings != null &&
                 peers != null &&
-                daily != null &&
+                //daily != null &&
                 news != null) {
             doneRequests = true;
             //System.out.println(query.toString());
             //System.out.println(quote.toString());
             //System.out.println(sma.toString());
-            System.out.println(social.toString());
+            //System.out.println(social.toString());
             //System.out.println(recommendation.toString());
             //System.out.println(earnings.toString());
-            System.out.println(peers.toString());
-            System.out.println(daily.toString());
+            //System.out.println(peers.toString());
+            //System.out.println(daily.toString());
             System.out.println(news.toString());
 
-            System.out.println("DONE!!");
+
+            findViewById(R.id.trade).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dialog dialog = new Dialog(ProfileActivity.this);
+                    dialog.setContentView(R.layout.dialog_trade);
+                    try {
+                        if(portfolioEntry == null)
+                            new Trade(dialog, new PortfolioEntry(stock_id ,query.getString("name"), 0, quote.getDouble("c")), quote.getDouble("c"), ProfileActivity.this);
+                        else
+                            new Trade(dialog, portfolioEntry, quote.getDouble("c"),ProfileActivity.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.show();
+                }
+            });
+
         }
     }
 
     public void setQuery() {
         try {
-            Picasso.get().load(query.getString("logo")).into((ImageView) findViewById(R.id.logo), new com.squareup.picasso.Callback() {
+            Picasso.get().load(query.getString("logo")).into(findViewById(R.id.logo), new com.squareup.picasso.Callback() {
                 @Override
                 public void onSuccess() {
                     doneLogo = true;
@@ -432,10 +386,36 @@ public class ProfileActivity extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.trend)).setColorFilter(getColor(R.color.black));
                 ((TextView) findViewById(R.id.price_change)).setTextColor(getColor(R.color.black));
             }
+
+            setPortfolio();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void setPortfolio () {
+        //Setup Portfolio
+        portfolioEntry = MainActivity.mainActivity.findPortfolio(stock_id);
+        if(portfolioEntry != null) {
+            try {
+                ((TextView) findViewById(R.id.portfolio_count)).setText(String.valueOf(portfolioEntry.get_hold()));
+                ((TextView) findViewById(R.id.portfolio_average)).setText("$" + Math.round(portfolioEntry.get_average() * 100.0) / 100.0);
+                ((TextView) findViewById(R.id.portfolio_cost)).setText("$" + Math.round(portfolioEntry.get_average() * portfolioEntry.get_hold() * 100.0) / 100.0);
+                ((TextView) findViewById(R.id.portfolio_change)).setText("$" + Math.round((quote.getDouble("c") - portfolioEntry.get_average()) * portfolioEntry.get_hold() * 100.0) / 100.0);
+                ((TextView) findViewById(R.id.portfolio_value)).setText("$" + Math.round(quote.getDouble("c") * portfolioEntry.get_hold() * 100.0) / 100.0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            ((TextView) findViewById(R.id.portfolio_count)).setText("0");
+            ((TextView) findViewById(R.id.portfolio_average)).setText("$0.00" );
+            ((TextView) findViewById(R.id.portfolio_cost)).setText("$0.00");
+            ((TextView) findViewById(R.id.portfolio_change)).setText("$0.00");
+            ((TextView) findViewById(R.id.portfolio_value)).setText("$0.00");
+        }
+    }
+
 
     public void setPeers() {
         try {
@@ -493,6 +473,69 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public void setNews() {
+        try {
+            JSONObject jsonObjects[] = new JSONObject[20];
+            int id = 0;
+            for(int i = 0; i < news.length() && id < 20; i++) {
+                if(!news.getJSONObject(i).getString("image").isEmpty()) {
+                    jsonObjects[id] = news.getJSONObject(i);
+                    id++;
+                }
+            }
+            if(jsonObjects[0] == null)
+                return;
+            Glide.with(ProfileActivity.this).load(jsonObjects[0].getString("image")).into((ImageView) ProfileActivity.this.findViewById(R.id.news_image));
+            Picasso.get().load(jsonObjects[0].getString("image")).into(findViewById(R.id.news_image), new Callback.EmptyCallback());
+            ((TextView)findViewById(R.id.news_provider)).setText(jsonObjects[0].getString("source"));
+            findViewById(R.id.headline).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    News news = new News(ProfileActivity.this, jsonObjects[0]);
+                    news.show();
+                }
+            });
+            long time = System.currentTimeMillis() / 1000;
+            long newstime = jsonObjects[0].getLong("datetime");
+            if(time - newstime > 3600)
+                ((TextView)findViewById(R.id.news_time)).setText(((int) (time - newstime) / 3600) + " hours ago");
+            else if (time - newstime > 60)
+                ((TextView)findViewById(R.id.news_time)).setText(((int) (time - newstime) / 60) + " minutes ago");
+            else
+                ((TextView)findViewById(R.id.news_time)).setText((time - newstime) + " seconds ago");
+            ((TextView)findViewById(R.id.news_title)).setText(jsonObjects[0].getString("headline"));
+            for(int i = 1; i < 20; i++) {
+                if(jsonObjects[i] == null)
+                    return;
+                else {
+                    News news = new News(ProfileActivity.this, jsonObjects[i]);
+                    View cardView = View.inflate(ProfileActivity.this, R.layout.news_layout, null);
+                    cardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            news.show();
+                        }
+                    });
+                    Glide.with(cardView).load(jsonObjects[i].getString("image")).into((ImageView) cardView.findViewById(R.id.news_image));
+                    ((TextView) cardView.findViewById(R.id.news_provider)).setText(jsonObjects[i].getString("source"));
+                    time = System.currentTimeMillis() / 1000;
+                    newstime = jsonObjects[i].getLong("datetime");
+                    if(time - newstime > 3600)
+                        ((TextView) cardView.findViewById(R.id.news_time)).setText(((int) (time - newstime) / 3600) + " hours ago");
+                    else if (time - newstime > 60)
+                        ((TextView) cardView.findViewById(R.id.news_time)).setText(((int) (time - newstime) / 60) + " minutes ago");
+                    else
+                        ((TextView) cardView.findViewById(R.id.news_time)).setText((time - newstime) + " seconds ago");
+                    ((TextView) cardView.findViewById(R.id.news_title)).setText(jsonObjects[i].getString("headline"));
+                    ((LinearLayout)findViewById(R.id.newslist)).addView(cardView);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     //page_viewer2 from https://developer.android.com/guide/navigation/navigation-swipe-view-2
     public class PagerAdapter extends FragmentStateAdapter {

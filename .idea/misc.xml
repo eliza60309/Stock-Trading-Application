@@ -6,24 +6,34 @@
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.126" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/daily.xml" value="0.1" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/daily_blue.xml" value="0.1" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/delete.xml" value="0.198" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/history.xml" value="0.1" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/history_blue.xml" value="0.1" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2085" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/magnify.xml" value="0.1035" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/round_btn.xml" value="0.198" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/round_btn_white.xml" value="0.198" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/round_dialog.xml" value="0.198" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/round_dialog_green.xml" value="0.198" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/star_outline.xml" value="0.189" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/trending-up.xml" value="0.1035" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/trending_down.xml" value="0.1035" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/drawable/trending_up.xml" value="0.1035" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/activity_profile.xml" value="0.3348375451263538" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/activity_profile.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/card_layout.xml" value="0.5" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/dialog_congrats.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/dialog_news.xml" value="0.22" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/dialog_trade.xml" value="0.20052083333333334" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/fragment_dummy.xml" value="0.1" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/fragment_webview.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/news_layout.xml" value="0.20052083333333334" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/layout/preload_layout.xml" value="0.1" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/menu/menu.xml" value="0.25" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/menu/profile.xml" value="0.2765625" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/menu/searchbar.xml" value="0.20104166666666667" />
         <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1035" />
+        <entry key="..\:/Users/eliza/AndroidStudioProjects/Hw9/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.197" />
       </map>
     </option>
   </component>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -25,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,12 +58,46 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     PortfolioListRecyclerViewAdapter portfolioListRecyclerViewAdapter;
     static ArrayList<PortfolioEntry> portfolioList;
 
+    //Net worth
+    TextView netWorth;
+    double cash;
+
     // Moved to individual file
     // public class LocalStorage {}
 
-    public void updatePreferenceList() {
-        localStorage.savePreferenceStorage(preferenceList);
-        preferenceListRecyclerViewAdapter.notifyDataSetChanged();
+    public PortfolioEntry findPortfolio(String stock_id) {
+        for(int i = 0; i < portfolioList.size(); i++) {
+            if(portfolioList.get(i).get_stock_id().equals(stock_id)) {
+                return portfolioList.get(i);
+            }
+        }
+        return null;
+    }
+
+    public double sumPortfolio() {
+        double sum = 0;
+        for(int i = 0; i < portfolioList.size(); i++) {
+            sum += portfolioList.get(i).price * portfolioList.get(i).get_hold();
+        }
+        return sum;
+    }
+
+    private void hookNetworth() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            while (true) {
+                try {
+                    runOnUiThread(() -> MainActivity.mainActivity.netWorth.setText("$" + String.format("%.2f", cash + sumPortfolio())));
+                    Thread.sleep(15000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -86,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(preferenceListRecyclerView);
         preferenceListRecyclerView.setAdapter(preferenceListRecyclerViewAdapter);
-        LocalStorage.savePreferenceStorage(preferenceList);
+        //LocalStorage.savePreferenceStorage(preferenceList);
 
 
         portfolioListRecyclerView = findViewById(R.id.portfolioListView);
@@ -102,7 +139,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         ItemTouchHelper touchHelper2 = new ItemTouchHelper(callback2);
         touchHelper2.attachToRecyclerView(portfolioListRecyclerView);
         portfolioListRecyclerView.setAdapter(portfolioListRecyclerViewAdapter);
+
+
+        LocalStorage.resetCashStorage();
+        cash = LocalStorage.loadCashStorage();
+        ((TextView) findViewById(R.id.cash)).setText("$" + String.format("%.2f", cash));
+        netWorth = MainActivity.mainActivity.findViewById(R.id.networth);
+        hookNetworth();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        ((TextView) findViewById(R.id.date)).setText(dtf.format(now));
+
+        findViewById(R.id.finnhub).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //6.13 https://www.tutorialkart.com/kotlin-android/android-open-url-in-browser-activity/
+                Intent openURL = new Intent(android.content.Intent.ACTION_VIEW);
+                openURL.setData(Uri.parse("https://finnhub.io/"));
+                startActivity(openURL);
+            }
+        });
     }
+
+    public void updateCash() {
+        cash = LocalStorage.loadCashStorage();
+        ((TextView) findViewById(R.id.cash)).setText("$" + String.format("%.2f", cash));
+        MainActivity.mainActivity.netWorth.setText("$" + String.format("%.2f", cash + sumPortfolio()));
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

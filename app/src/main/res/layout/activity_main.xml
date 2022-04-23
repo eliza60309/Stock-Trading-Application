@@ -27,6 +27,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="DATE"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:id="@+id/date">
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/grey"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="PORTFOLIO"
@@ -34,6 +44,52 @@
                 android:padding="5dp"
                 android:id="@+id/text_portfolio">
             </TextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Net Worth"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/networth_text">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Cash Balance"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/cash_text">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/networth"
+                    android:text="$00000.00"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_alignStart="@id/networth_text"
+                    android:layout_below="@id/networth_text">
+
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="$00000.00"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:id="@+id/cash"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignStart="@id/cash_text"
+                    android:layout_below="@id/cash_text">
+                </TextView>
+            </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/portfolioListView"
                 android:layout_width="match_parent"
@@ -60,6 +116,21 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/text_favorite">
             </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Powered by Finnhub"
+                android:textColor="@color/grey"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:padding="5dp"
+                android:id="@+id/finnhub">
+            </TextView>
+            <TextView
+                android:id="@+id/padding"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"></TextView>
         </LinearLayout>
     </ScrollView>
     <!--

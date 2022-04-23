@@ -114,12 +114,10 @@ public class LocalStorage {
 
     public static double loadCashStorage() {
         SharedPreferences getter = mainActivity.getSharedPreferences("Data", 0);
-        getter.getFloat("Cash", 0);
-        if (getter.getFloat("Cash", -1) == -1) {
+        if (getter.getString("Cash", null) == null) {
             return 25000;
         }
-        System.out.println("GET CASH: " + getter.getFloat("Cash", -1));
-        return getter.getFloat("Cash", -1);
+        return Float.valueOf(getter.getString("Cash", null));
     }
 
     public static void saveCashStorage(double cash) {

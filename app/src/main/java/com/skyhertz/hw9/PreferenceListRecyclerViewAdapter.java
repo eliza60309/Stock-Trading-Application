@@ -132,16 +132,16 @@ public class PreferenceListRecyclerViewAdapter extends RecyclerView.Adapter<Pref
 
     @Override
     public void onRowSelected(MyViewHolder myViewHolder) {
-        myViewHolder.rowView.setBackgroundColor(Color.GRAY);
+        //myViewHolder.rowView.setBackgroundColor(Color.GRAY);
     }
 
     @Override
     public void onRowClear(MyViewHolder myViewHolder) {
-        myViewHolder.rowView.setBackgroundColor(Color.WHITE);
+        //myViewHolder.rowView.setBackgroundColor(Color.WHITE);
         if(rowMoved) {
             rowMoved = false;
+            LocalStorage.savePreferenceStorage(MainActivity.preferenceList);
             //MainActivity.mainActivity.updatePreferenceList();
-
         }
     }
 

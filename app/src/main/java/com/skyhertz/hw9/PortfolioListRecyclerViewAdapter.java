@@ -61,7 +61,7 @@ public class PortfolioListRecyclerViewAdapter extends RecyclerView.Adapter<Portf
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.stock_id.setText(data.get(position).get_stock_id());
-        holder.name.setText(data.get(position).get_name());
+        holder.name.setText(data.get(position).get_hold() + " shares");
         holder.goBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ProfileActivity.class);
@@ -69,15 +69,17 @@ public class PortfolioListRecyclerViewAdapter extends RecyclerView.Adapter<Portf
                 v.getContext().startActivity(intent);
             }
         });
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        data.get(position).timer = new Timer();
+        data.get(position).timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 RequestCallbacks callbacks = new RequestCallbacks() {
                     @Override
                     public void onSuccess(JSONObject result) {
                         try {
-                            holder.price.setText("$" + Math.round(result.getDouble("c") * 100.0) / 100.0 * data.get(position).get_hold());
+                            int position = holder.getAdapterPosition();
+                            data.get(position).price = result.getDouble("c");
+                            holder.price.setText("$" + Math.round(result.getDouble("c") * data.get(position).get_hold() * 100.0) / 100.0);
                             double d_total = Math.round((result.getDouble("c") - data.get(position).get_average()) * data.get(position).get_hold() * 100.0) / 100.0;
                             double cost_total = data.get(position).get_average() * data.get(position).get_hold() * 100.0 / 100.0;
                             holder.priceChange.setText("$" + d_total  + " (" + Math.round(d_total / cost_total * 10000.0) / 100.0 + "%)");
@@ -133,21 +135,33 @@ public class PortfolioListRecyclerViewAdapter extends RecyclerView.Adapter<Portf
 
     @Override
     public void onRowSelected(MyViewHolder myViewHolder) {
-        myViewHolder.rowView.setBackgroundColor(Color.GRAY);
+        //myViewHolder.rowView.setBackgroundColor(Color.GRAY);
     }
 
     @Override
     public void onRowClear(MyViewHolder myViewHolder) {
-        myViewHolder.rowView.setBackgroundColor(Color.WHITE);
+        //myViewHolder.rowView.setBackgroundColor(Color.WHITE);
         if(rowMoved) {
             rowMoved = false;
-
+            LocalStorage.savePortfolioStorage(MainActivity.portfolioList);
         }
     }
 
     public void delete(int position) {
         data.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void delete(String stock_id) {
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).get_stock_id().equals(stock_id)) {
+                data.remove(i);
+                notifyItemRemoved(i);
+                return;
+            }
+        }
+        //data.remove(position);
+        //notifyItemRemoved(position);
     }
 
     public void add(PortfolioEntry portfolioEntry) {

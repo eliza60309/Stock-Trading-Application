@@ -1,10 +1,15 @@
 package com.skyhertz.hw9;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class PortfolioEntry {
     private String _name;
     private String _stock_id;
     private int _hold;
     private double _average;
+    Timer timer;
+    double price;
     public PortfolioEntry(String stock_id, String name, int amount, double average) {
         _name = name;
         _stock_id = stock_id;
