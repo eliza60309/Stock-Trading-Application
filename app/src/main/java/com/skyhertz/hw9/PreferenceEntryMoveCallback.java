@@ -66,6 +66,7 @@ public class PreferenceEntryMoveCallback extends ItemTouchHelper.Callback {
         int position = viewHolder.getAdapterPosition();
         //MainActivity.preferenceList.remove(position);
         mAdapter.delete(position);
+        LocalStorage.savePreferenceStorage(MainActivity.preferenceList);
         //MainActivity.mainActivity.updatePreferenceList();
     }
 

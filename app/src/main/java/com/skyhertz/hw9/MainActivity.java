@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             while (true) {
                 try {
                     runOnUiThread(() -> MainActivity.mainActivity.netWorth.setText("$" + String.format("%.2f", cash + sumPortfolio())));
+                    runOnUiThread(() -> MainActivity.mainActivity.findViewById(R.id.progressBar1).setVisibility(View.INVISIBLE));
+                    runOnUiThread(() -> MainActivity.mainActivity.findViewById(R.id.mainView).setVisibility(View.VISIBLE));
+
                     Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -111,11 +119,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         preferenceListRecyclerView = findViewById(R.id.preferenceListView);
         localStorage = new LocalStorage(this);
-        LocalStorage.clearPreferenceStorage();
+        //LocalStorage.clearPreferenceStorage();
         preferenceList = LocalStorage.loadPreferenceStorage();
-        preferenceList.add(new PreferenceEntry("AAPL", "Expensive Device Company"));
+        /*preferenceList.add(new PreferenceEntry("AAPL", "Expensive Device Company"));
         preferenceList.add(new PreferenceEntry("TSLA", "Iron Ball to the Window"));
-        preferenceList.add(new PreferenceEntry("MSFT", "Windows 10 is the last Windows"));
+        preferenceList.add(new PreferenceEntry("MSFT", "Windows 10 is the last Windows"));*/
 
 
         preferenceListRecyclerViewAdapter = new PreferenceListRecyclerViewAdapter(preferenceList);
@@ -127,11 +135,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
         portfolioListRecyclerView = findViewById(R.id.portfolioListView);
-        LocalStorage.clearPortfolioStorage();
+        //LocalStorage.clearPortfolioStorage();
         portfolioList = LocalStorage.loadPortfolioStorage();
-        portfolioList.add(new PortfolioEntry("AAPL", "Expensive Device Company", 1, 165));
+        /*portfolioList.add(new PortfolioEntry("AAPL", "Expensive Device Company", 1, 165));
         portfolioList.add(new PortfolioEntry("TSLA", "Iron Ball to the Window", 1, 1011));
-        portfolioList.add(new PortfolioEntry("MSFT", "Windows 10 is the last Windows", 1, 1000));
+        portfolioList.add(new PortfolioEntry("MSFT", "Windows 10 is the last Windows", 1, 1000));*/
 
 
         portfolioListRecyclerViewAdapter = new PortfolioListRecyclerViewAdapter(portfolioList);
@@ -141,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         portfolioListRecyclerView.setAdapter(portfolioListRecyclerViewAdapter);
 
 
-        LocalStorage.resetCashStorage();
+        //LocalStorage.resetCashStorage();
         cash = LocalStorage.loadCashStorage();
         ((TextView) findViewById(R.id.cash)).setText("$" + String.format("%.2f", cash));
         netWorth = MainActivity.mainActivity.findViewById(R.id.networth);
@@ -185,6 +193,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onQueryTextSubmit(String query) {
         //TODO: Text submitted
         //TODO: HOW TO ADD TO PREFERENCE LIST
+
+        if(query.equals("!reset")) {
+            LocalStorage.clearPortfolioStorage();
+            LocalStorage.clearPreferenceStorage();
+            LocalStorage.resetCashStorage();
+            Toast.makeText(MainActivity.this, "Reset Local Storage", Toast.LENGTH_LONG).show();
+        }
         //preferenceList.add(new PreferenceEntry(query, query));
         //System.out.println(preferenceList.toString());
         //preferenceListRecyclerViewAdapter.notifyDataSetChanged();

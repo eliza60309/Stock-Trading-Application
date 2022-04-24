@@ -13,4 +13,5 @@
     <color name="blue">#FF0000FF</color>
     <color name="grey">#FFAAAAAA</color>
     <color name="lightgrey">#FFCCCCCC</color>
+    <color name="colorPrimary">#357EC7</color>
 </resources>

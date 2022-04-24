@@ -25,7 +25,7 @@ public class PreloadActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-        timer.schedule(boot, 2000);
+        timer.schedule(boot, 1000);
     }
 
 }

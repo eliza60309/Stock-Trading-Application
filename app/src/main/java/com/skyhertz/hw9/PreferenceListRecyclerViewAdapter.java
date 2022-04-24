@@ -78,8 +78,8 @@ public class PreferenceListRecyclerViewAdapter extends RecyclerView.Adapter<Pref
                     @Override
                     public void onSuccess(JSONObject result) {
                         try {
-                            holder.price.setText("$" + Math.round(result.getDouble("c") * 100.0) / 100.0);
-                            holder.priceChange.setText("$" + Math.round(result.getDouble("d") * 100.0) / 100.0 + " (" + Math.round(result.getDouble("dp") * 100.0) / 100.0 + "%)");
+                            holder.price.setText("$" +  String.format("%.2f", result.getDouble("c")));
+                            holder.priceChange.setText("$" +  String.format("%.2f", result.getDouble("d")) + " (" +  String.format("%.2f", result.getDouble("dp")) + "%)");
                             boolean trend_up = Math.round(result.getDouble("d") * 100.0) > 0;
                             boolean trend_down = Math.round(result.getDouble("d") * 100.0) < 0;
                             holder.trend.setVisibility(View.VISIBLE);

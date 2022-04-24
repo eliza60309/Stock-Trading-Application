@@ -301,8 +301,7 @@ public class ProfileActivity extends AppCompatActivity {
             //System.out.println(earnings.toString());
             //System.out.println(peers.toString());
             //System.out.println(daily.toString());
-            System.out.println(news.toString());
-
+            //System.out.println(news.toString());
 
             findViewById(R.id.trade).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -320,6 +319,9 @@ public class ProfileActivity extends AppCompatActivity {
                     dialog.show();
                 }
             });
+
+            findViewById(R.id.progressBar1).setVisibility(View.INVISIBLE);
+            findViewById(R.id.scrollable).setVisibility(View.VISIBLE);
 
         }
     }
@@ -362,12 +364,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void setQuote() {
         try {
-            ((TextView) findViewById(R.id.price)).setText("$" + Math.round(quote.getDouble("c") * 100.0) / 100.0);
-            ((TextView) findViewById(R.id.price_change)).setText("$" + Math.round(quote.getDouble("d") * 100.0) / 100.0 + " (" + Math.round(quote.getDouble("dp") * 100.0) / 100.0 + "%)");
-            ((TextView) findViewById(R.id.stats_open)).setText("$" + Math.round(quote.getDouble("o") * 100.0) / 100.0);
-            ((TextView) findViewById(R.id.stats_high)).setText("$" + Math.round(quote.getDouble("h") * 100.0) / 100.0);
-            ((TextView) findViewById(R.id.stats_low)).setText("$" + Math.round(quote.getDouble("l") * 100.0) / 100.0);
-            ((TextView) findViewById(R.id.stats_close)).setText("$" + Math.round(quote.getDouble("pc") * 100.0) / 100.0);
+            ((TextView) findViewById(R.id.price)).setText("$" + String.format("%.2f", quote.getDouble("c")));
+            ((TextView) findViewById(R.id.price_change)).setText("$" + String.format("%.2f", quote.getDouble("d")) + " (" +  String.format("%.2f", quote.getDouble("dp")) + "%)");
+            ((TextView) findViewById(R.id.stats_open)).setText("$" + String.format("%.2f", quote.getDouble("o")));
+            ((TextView) findViewById(R.id.stats_high)).setText("$" + String.format("%.2f", (quote.getDouble("h"))));
+            ((TextView) findViewById(R.id.stats_low)).setText("$" + String.format("%.2f",(quote.getDouble("l"))));
+            ((TextView) findViewById(R.id.stats_close)).setText("$" + String.format("%.2f",(quote.getDouble("pc"))));
             trend_up = Math.round(quote.getDouble("d") * 100.0) > 0;
             trend_down = Math.round(quote.getDouble("d") * 100.0) < 0;
             findViewById(R.id.trend).setVisibility(View.VISIBLE);
@@ -399,10 +401,10 @@ public class ProfileActivity extends AppCompatActivity {
         if(portfolioEntry != null) {
             try {
                 ((TextView) findViewById(R.id.portfolio_count)).setText(String.valueOf(portfolioEntry.get_hold()));
-                ((TextView) findViewById(R.id.portfolio_average)).setText("$" + Math.round(portfolioEntry.get_average() * 100.0) / 100.0);
-                ((TextView) findViewById(R.id.portfolio_cost)).setText("$" + Math.round(portfolioEntry.get_average() * portfolioEntry.get_hold() * 100.0) / 100.0);
-                ((TextView) findViewById(R.id.portfolio_change)).setText("$" + Math.round((quote.getDouble("c") - portfolioEntry.get_average()) * portfolioEntry.get_hold() * 100.0) / 100.0);
-                ((TextView) findViewById(R.id.portfolio_value)).setText("$" + Math.round(quote.getDouble("c") * portfolioEntry.get_hold() * 100.0) / 100.0);
+                ((TextView) findViewById(R.id.portfolio_average)).setText("$" +  String.format("%.2f",portfolioEntry.get_average()));
+                ((TextView) findViewById(R.id.portfolio_cost)).setText("$" +  String.format("%.2f",portfolioEntry.get_average() * portfolioEntry.get_hold()));
+                ((TextView) findViewById(R.id.portfolio_change)).setText("$" +  String.format("%.2f",(quote.getDouble("c") - portfolioEntry.get_average()) * portfolioEntry.get_hold()));
+                ((TextView) findViewById(R.id.portfolio_value)).setText("$" +  String.format("%.2f",quote.getDouble("c") * portfolioEntry.get_hold()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

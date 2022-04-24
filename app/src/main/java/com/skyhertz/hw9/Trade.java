@@ -32,7 +32,7 @@ public class Trade {
             public void afterTextChanged(Editable editable) {
                 if(!editable.toString().isEmpty()) {
                     input = Integer.parseInt(editable.toString());
-                    ((TextView) dialog.findViewById(R.id.hint)).setText(input + "*" + Math.round(price * 100.0) / 100.0 + "/share = " + Math.round(price * input * 100.0) / 100.0);
+                    ((TextView) dialog.findViewById(R.id.hint)).setText(input + "*" +  String.format("%.2f", price) + "/share = " +  String.format("%.2f",price * input));
                 }
             }
         });
@@ -40,8 +40,8 @@ public class Trade {
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setLayout((int) (profileActivity.getResources().getDisplayMetrics().widthPixels * 0.9), (int) (profileActivity.getResources().getDisplayMetrics().heightPixels * 0.5));
-        ((TextView) dialog.findViewById(R.id.hint)).setText("0*" + Math.round(price * 100.0) / 100.0 + "/share = 0.00");
-        ((TextView) dialog.findViewById(R.id.hint2)).setText("$" + Math.round(MainActivity.mainActivity.cash * 100.0) / 100.0 + " to buy " + portfolioEntry.get_stock_id());
+        ((TextView) dialog.findViewById(R.id.hint)).setText("0*" +  String.format("%.2f", price) + "/share = 0.00");
+        ((TextView) dialog.findViewById(R.id.hint2)).setText("$" +  String.format("%.2f", MainActivity.mainActivity.cash) + " to buy " + portfolioEntry.get_stock_id());
         ((TextView) dialog.findViewById(R.id.title)).setText("Trade " + portfolioEntry.get_name() + " shares");
         dialog.findViewById(R.id.buy).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -79,10 +79,10 @@ public class PortfolioListRecyclerViewAdapter extends RecyclerView.Adapter<Portf
                         try {
                             int position = holder.getAdapterPosition();
                             data.get(position).price = result.getDouble("c");
-                            holder.price.setText("$" + Math.round(result.getDouble("c") * data.get(position).get_hold() * 100.0) / 100.0);
-                            double d_total = Math.round((result.getDouble("c") - data.get(position).get_average()) * data.get(position).get_hold() * 100.0) / 100.0;
+                            holder.price.setText("$" +  String.format("%.2f", result.getDouble("c") * data.get(position).get_hold()));
+                            double d_total =  (result.getDouble("c") - data.get(position).get_average()) * data.get(position).get_hold();
                             double cost_total = data.get(position).get_average() * data.get(position).get_hold() * 100.0 / 100.0;
-                            holder.priceChange.setText("$" + d_total  + " (" + Math.round(d_total / cost_total * 10000.0) / 100.0 + "%)");
+                            holder.priceChange.setText("$" +  String.format("%.2f", d_total)  + " (" +  String.format("%.2f",d_total / cost_total * 100) + "%)");
                             boolean trend_up = d_total > 0;
                             boolean trend_down = d_total < 0;
                             holder.trend.setVisibility(View.VISIBLE);
